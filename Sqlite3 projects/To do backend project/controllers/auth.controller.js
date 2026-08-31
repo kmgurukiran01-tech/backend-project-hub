@@ -1,6 +1,4 @@
 const bcrypt=require('bcrypt')
-const generationToken=require('../utils/jwt');
-const { use } = require('react');
 const generateToken = require('../utils/jwt');
 
 const registeUser=async (req,res)=>{
