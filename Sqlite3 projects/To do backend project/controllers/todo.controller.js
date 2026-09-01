@@ -1,122 +1,208 @@
-const getTodos=async(req,res)=>{
-    try{
-        const todos=await req.app.locals.db.all(
-             `SELECT *  FROM todos where user_id=? order by id desc`,[req.userID]       
-             );
+const getTodos = async (req, res) => {
+    try {
+        const todos = await req.app.locals.db.all(
+            `SELECT *
+             FROM todos
+             WHERE user_id = ?
+             ORDER BY id DESC`,
+            [req.userId]
+        );
+
         res.json(todos);
 
-    }catch(erorr){
-         res.status(500).json({
-              message:'server error',
-         })
+    } catch (error) {
+        res.status(500).json({
+            message: "server error",
+        });
     }
 };
 
 
+const getTodoById = async (req, res) => {
 
-const getTodoById=async(req,res)=>{
-    const {id}=req.params
-    try{
+    const { id } = req.params;
 
-        const todo=await req.app.locals.db.get(
-             `SELECT *  FROM todos where id=? and user_id=?`,[id,req.userID]       
-             )
-       
+    try {
 
-        if(!todo){
+        const todo = await req.app.locals.db.get(
+            `SELECT *
+             FROM todos
+             WHERE id = ?
+             AND user_id = ?`,
+            [id, req.userId]
+        );
+
+        if (!todo) {
             return res.status(404).json({
-                message:"Todo not found",
-            })
+                message: "Todo not found",
+            });
         }
 
-        res.json(todo)
+        res.json(todo);
 
-    }catch(erorr){
-         res.status(500).json({
-              message:'server error',
-         })
+    } catch (error) {
+        res.status(500).json({
+            message: "server error",
+        });
     }
-}
+};
 
 
+const createTodo = async (req, res) => {
 
-const createTodo=async(req,res)=>{
-    const {title,description}=req.body
+    const { title, description } = req.body;
 
-
-      if(!title){
+    if (!title) {
         return res.status(400).json({
-            message:"title not found",
-        })
-      }
-
-    try{
-        const result=await req.app.locals.db.run(
-            `insert into todos (user_id,title, description) values(?, ?, ?)`,
-            [req.userID,title,description||null]
-        )
-
-        const newtodo=await req.app.locals.db.get(
-         `SELECT *  FROM todos where id=?`,[result.lastID]
-        )
-        
-       res.status(201).json(newtodo)
-    }catch(erorr){
-         res.status(500).json({
-              message:'server error',
-         })
+            message: "title not found",
+        });
     }
-}
 
-const updatetodo=async(req,res)=>{
-       const {id}=req.params
-       const {title,description,status}=req.body
-    try{
+    try {
 
+        const result = await req.app.locals.db.run(
+            `INSERT INTO todos
+             (user_id, title, description)
+             VALUES (?, ?, ?)`,
+            [
+                req.userId,
+                title,
+                description || null
+            ]
+        );
 
-      const todo=await req.app.locals.db.get(
-       ` select * from todos where id=? and user_id=?`,[id,req.userID]
-      )
-      if(!todo){
-        return res.status(404).json({
-            message:"todo not found",
-        })
-      }
+        const newtodo = await req.app.locals.db.get(
+            `SELECT *
+             FROM todos
+             WHERE id = ?`,
+            [result.lastID]
+        );
 
-        const updatedTitle = title !== undefined ? title : todo.title;
-        const updatedDescription = description !== undefined ? description : todo.description;
-        const updatedStatus = status !== undefined ? status : todo.status;
+        res.status(201).json(newtodo);
 
-
-    await req.app.locals.db.run
-    (`update todos
-         set
-        title=?,description=?,status=?
-        where id=? and user_id=?`,
- [updatedTitle, updatedDescription, updatedStatus, id, req.userID])
-
-
-const updatedtodo=await req.app.locals.db.get(
-    `select * from todos where id=?;`,[id]
-);
-  res.json(updatedtodo)
+    } catch (error) {
+        res.status(500).json({
+            message: "server error",
+        });
     }
-    catch(erorr){
-         res.status(500).json({
-              message:'server error',
-         })
-    }
-}
+};
 
 
+const updatetodo = async (req, res) => {
 
-const deleteTodo=async(req,res)=>{
-    try{
-        
+    const { id } = req.params;
+
+    const {
+        title,
+        description,
+        status
+    } = req.body;
+
+    try {
+
+        const todo = await req.app.locals.db.get(
+            `SELECT *
+             FROM todos
+             WHERE id = ?
+             AND user_id = ?`,
+            [id, req.userId]
+        );
+
+        if (!todo) {
+            return res.status(404).json({
+                message: "todo not found",
+            });
+        }
+
+        const updatedTitle =
+            title !== undefined
+                ? title
+                : todo.title;
+
+        const updatedDescription =
+            description !== undefined
+                ? description
+                : todo.description;
+
+        const updatedStatus =
+            status !== undefined
+                ? status
+                : todo.status;
+
+
+        await req.app.locals.db.run(
+            `UPDATE todos
+             SET title = ?,
+                 description = ?,
+                 status = ?
+             WHERE id = ?
+             AND user_id = ?`,
+            [
+                updatedTitle,
+                updatedDescription,
+                updatedStatus,
+                id,
+                req.userId
+            ]
+        );
+
+
+        const updatedtodo =
+            await req.app.locals.db.get(
+                `SELECT *
+                 FROM todos
+                 WHERE id = ?`,
+                [id]
+            );
+
+        res.json(updatedtodo);
+
+    } catch (error) {
+        res.status(500).json({
+            message: "server error",
+        });
     }
-    catch(eror){
-         res.status(500).json({
-              message:'server error',
-         })
+};
+
+
+const deleteTodo = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+
+        const deleteTodo =
+            await req.app.locals.db.run(
+                `DELETE FROM todos
+                 WHERE id = ?
+                 AND user_id = ?`,
+                [id, req.userId]
+            );
+
+
+        if (deleteTodo.changes === 0) {
+            return res.status(404).json({
+                message: "Todo not found",
+            });
+        }
+
+
+        res.json({
+            message: "Todo deleted successfully",
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "server error",
+        });
     }
-}
+};
+
+
+module.exports = {
+    getTodos,
+    getTodoById,
+    createTodo,
+    updatetodo,
+    deleteTodo
+};

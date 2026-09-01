@@ -5,7 +5,7 @@ const getuserprofile=async(req,res)=>{
             id=?`,[req.userId]
         );
 
-        if(!user){
+        if(!getquery){
            return res.status(404).json({
                 Message:"user not found",
             })

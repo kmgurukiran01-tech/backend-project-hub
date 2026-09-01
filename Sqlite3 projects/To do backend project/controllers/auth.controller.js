@@ -23,7 +23,7 @@ try{
     );
     res.status(201).json({
         message:'user registered successfully',
-    userId:result.lastId,
+    userId:result.lastID,
 })
 
 }catch(error){
