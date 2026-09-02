@@ -70,7 +70,8 @@ const loginuser=async(req,res)=>{
  
 }
 
-
 module.exports={
     registeUser,loginuser
 }
+
+
