@@ -1,0 +1,12 @@
+todo-backend/
+├── src/
+│   ├── controllers/
+│   ├── routes/
+│   ├── middleware/
+│   ├── db/
+│   └── app.js
+│
+├── server.js
+├── .env
+├── package.json
+└── package-lock.json
