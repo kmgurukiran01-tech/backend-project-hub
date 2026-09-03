@@ -14,10 +14,10 @@ router.use(authenticateToken);
 
 
 router.get('/',getTodos)
-router.get('/:Id',getTodoById)
+router.get('/:id',getTodoById)
 router.post('/',createTodo)
-router.put('/:Id',updatetodo)
-router.delete('/:Id',deleteTodo)
+router.put('/:id',updatetodo)
+router.delete('/:id',deleteTodo)
 
 
 module.exports=router;

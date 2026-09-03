@@ -1,12 +1,14 @@
-const express=require('express')
+const express = require("express");
 
-const {getuserprofile}=require('../controllers/user.controller');
+const getuserprofile = require("../controllers/user.controller");
+const authentication = require("../middleware/auth");
 
-const authenticateToken = require("../middleware/auth");
-const router=express.Router()
+const router = express.Router();
 
+router.get(
+    "/profile",
+    authentication,
+    getuserprofile
+);
 
-router.get('/Profile',authenticateToken,getuserprofile)
-
-
-module.exports=router;
+module.exports = router;
