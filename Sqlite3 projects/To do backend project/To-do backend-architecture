@@ -1,12 +1,27 @@
-todo-backend/
-├── src/
-│   ├── controllers/
-│   ├── routes/
-│   ├── middleware/
-│   ├── db/
-│   └── app.js
+my-backend/
 │
-├── server.js
+├── controllers/
+│   ├── auth.controller.js
+│   ├── todo.controller.js
+│   └── user.controller.js
+│
+├── database/
+│   └── schema.sql
+│
+├── middleware/
+│   └── auth.js
+│
+├── routes/
+│   ├── auth.routes.js
+│   ├── todo.routes.js
+│   └── user.routes.js
+│
+├── utils/
+│   └── jwt.js
+│
 ├── .env
 ├── package.json
-└── package-lock.json
+├── server.js
+└── todo.db
+
+
