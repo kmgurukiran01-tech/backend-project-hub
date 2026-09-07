@@ -1,0 +1,1 @@
+const { connectRedis } = require("./src/config/redis");

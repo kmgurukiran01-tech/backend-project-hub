@@ -1,0 +1,36 @@
+task-api/
+│
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   │   |__redis.js
+|   |     
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   └── taskController.js
+│   │
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   └── taskRoutes.js
+│   │
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   ├── validationMiddleware.js
+│   │   └── errorMiddleware.js
+│   │
+│   ├── validators/
+│   │   ├── authValidator.js
+│   │   └── taskValidator.js
+│   │
+│   ├── queries/
+│   │   ├── userQueries.js
+│   │   └── taskQueries.js
+│   │
+│   ├── app.js
+│   └── server.js
+│
+├── .env
+├── .gitignore
+├── docker-compose.yml
+├── package.json
+└── package-lock.json
