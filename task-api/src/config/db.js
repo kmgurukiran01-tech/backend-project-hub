@@ -8,3 +8,24 @@ const pool=new pool({
     password: process.env.DB_PAASSWORD,
     database: process.env.DB_NAME
 })
+
+const initialize=async()=>{
+    try{
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS USER(
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            email VARCHAR(200) UNIQUE NOT NULL,
+            password VARCHAR(200) UNIQUE NOT NULL,
+            created_at TIMETSAMP default  CURRENT_TIMESTAMP );`);
+
+
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS tasks(
+            )`)
+
+
+    }catch{
+
+    }
+}
